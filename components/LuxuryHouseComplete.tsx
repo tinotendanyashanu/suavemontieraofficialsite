@@ -1,5 +1,7 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
+import Image from "next/image";
+import * as THREE from "three";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,11 +18,12 @@ const brand = {
 
 // Media Assets
 const IMAGES = {
-  hero: "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=2000&auto=format&fit=crop",
-  founder: "https://images.unsplash.com/photo-1592878904946-b3cd9f36f05d?q=80&w=1600&auto=format&fit=crop",
+  hero: "/hero.jpg",
+  founder: "/founder.jpg",
+  logo: "/logo.jpg",
   collection_business: "/business.jpg",
-  collection_wedding: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=1600&auto=format&fit=crop",
-  collection_redcarpet: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop",
+  collection_wedding: "/wedding.jpg",
+  collection_redcarpet: "/red.jpg",
 } as const;
 
 // Color System for 3D
@@ -84,7 +87,7 @@ const H2 = ({ children }: { children: React.ReactNode }) => (
 // Static Hero Component
 const HeroStatic = () => (
   <div className="relative">
-    <img src={IMAGES.hero} alt="Suave Montiera hero" className="w-full h-[92vh] object-cover" />
+    <Image src={IMAGES.hero} alt="Suave Montiera hero" className="w-full h-[92vh] object-cover" width={1920} height={1080} priority />
     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
     <Section className="absolute inset-0 flex items-end pb-24">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
@@ -110,8 +113,8 @@ const NavBar = () => (
   <div className="sticky top-0 z-50 backdrop-blur bg-black/50 border-b border-zinc-900">
     <Section className="py-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-full flex items-center justify-center brand-gold-bg">
-          <span className="text-black font-semibold text-lg">S</span>
+        <div className="h-10 w-10 rounded-full overflow-hidden">
+          <Image src={IMAGES.logo} alt="Suave Montiera Logo" width={40} height={40} className="w-full h-full object-cover" />
         </div>
         <div className="leading-tight">
           <div className="text-white font-medium tracking-wide">{brand.name}</div>
@@ -134,7 +137,7 @@ const TheHouse = () => (
   <Section id="house" className="py-24">
     <div className="grid md:grid-cols-2 gap-14 items-center">
       <div className="rounded-2xl overflow-hidden border border-zinc-800">
-        <img src={IMAGES.founder} alt="Founder portrait" className="w-full h-full object-cover" />
+        <Image src={IMAGES.founder} alt="Founder portrait" className="w-full h-full object-cover" width={600} height={600} />
       </div>
       <div>
         <Eyebrow>THE HOUSE</Eyebrow>
@@ -150,7 +153,7 @@ const TheHouse = () => (
 const ShowcaseCard = ({ title, img, blurb }: { title: string; img: string; blurb: string }) => (
   <Card className="bg-zinc-950/70 border border-zinc-900 rounded-3xl overflow-hidden">
     <div className="h-[420px] overflow-hidden">
-      <img src={img} alt={title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+      <Image src={img} alt={title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" width={400} height={420} />
     </div>
     <CardContent className="p-6">
       <div className="flex items-center justify-between">
@@ -190,7 +193,7 @@ const Lookbook = () => (
     <div className="mt-12 grid md:grid-cols-3 gap-6">
       {[IMAGES.collection_business, IMAGES.collection_wedding, IMAGES.collection_redcarpet].map((src, i) => (
         <div key={i} className="rounded-2xl overflow-hidden border border-zinc-800">
-          <img src={src} alt={`Look ${i + 1}`} className="w-full h-[420px] object-cover" />
+          <Image src={src} alt={`Look ${i + 1}`} className="w-full h-[420px] object-cover" width={400} height={420} />
         </div>
       ))}
     </div>
@@ -253,11 +256,11 @@ function SuitAvatar({
   accentHex: string;
   url?: string;
 }) {
-  const [useFallback, setUseFallback] = useState(true); // Start with fallback for now
+  // For now, always use the fallback realistic human figure
+  // TODO: Implement GLB loading when the model is ready
+  const useFallback = true;
 
-  // Try to load the GLB model, but use fallback if it fails
-  if (useFallback) {
-    // Realistic human figure matching Sketchfab quality - anatomically correct
+  // Realistic human figure matching Sketchfab quality - anatomically correct
     return (
       <group scale={1.6} position={[0, -1.4, 0]}>
         {/* Human Head - Realistic proportions */}
@@ -531,91 +534,6 @@ function SuitAvatar({
         </mesh>
       </group>
     );
-  }
-
-  try {
-    const gltfData = useGLTF(url);
-    console.log("GLTF Data received:", gltfData);
-    
-    if (!gltfData || !gltfData.scene) {
-      console.warn("No valid scene data in GLB file, using fallback");
-      setUseFallback(true);
-      return null; // Will re-render with fallback
-    }
-
-    const { scene } = gltfData;
-    
-    useEffect(() => {
-      if (scene) {
-        console.log("3D Model loaded successfully:", scene);
-        console.log("Model children count:", scene.children.length);
-        
-        // Log all materials found
-        const materials: string[] = [];
-        scene.traverse((child: any) => {
-          if (child.material) {
-            materials.push(`${child.name || 'unnamed'}: ${child.material.name || 'unnamed_material'}`);
-          }
-        });
-        console.log("All materials found:", materials);
-      }
-    }, [scene]);
-    
-    // Clone the scene to avoid modifying the original
-    const clonedScene = scene.clone();
-    
-    // Apply colors to materials - try multiple strategies
-    const applyColors = (object: any) => {
-      if (object.material) {
-        const materialName = object.material.name?.toLowerCase() || '';
-        const objectName = object.name?.toLowerCase() || '';
-        
-        console.log(`Checking object: ${objectName}, material: ${materialName}`);
-        
-        // Strategy 1: Check against our hints
-        if (SUIT_HINTS.some(hint => materialName.includes(hint) || objectName.includes(hint))) {
-          object.material = object.material.clone();
-          object.material.color.set(suitHex);
-          console.log("✓ Applied suit color to:", objectName || materialName);
-        }
-        else if (SHIRT_HINTS.some(hint => materialName.includes(hint) || objectName.includes(hint))) {
-          object.material = object.material.clone();
-          object.material.color.set(shirtHex);
-          console.log("✓ Applied shirt color to:", objectName || materialName);
-        }
-        else if (ACCENT_HINTS.some(hint => materialName.includes(hint) || objectName.includes(hint))) {
-          object.material = object.material.clone();
-          object.material.color.set(accentHex);
-          console.log("✓ Applied accent color to:", objectName || materialName);
-        }
-        // Strategy 2: Fallback - color everything that's not skin/hair/shoes
-        else if (!EXCLUDE_HINTS.some(hint => materialName.includes(hint) || objectName.includes(hint))) {
-          object.material = object.material.clone();
-          object.material.color.set(suitHex); // Default to suit color
-          console.log("✓ Applied default suit color to:", objectName || materialName);
-        }
-      }
-      
-      // Recursively apply to children
-      if (object.children) {
-        object.children.forEach(applyColors);
-      }
-    };
-    
-    applyColors(clonedScene);
-    
-    return (
-      <primitive 
-        object={clonedScene} 
-        scale={2} 
-        position={[0, -1.8, 0]} 
-      />
-    );
-  } catch (error) {
-    console.error("useGLTF hook failed:", error);
-    setUseFallback(true);
-    return null; // Will re-render with fallback
-  }
 }
 
 function ShowroomCanvasHuman({ suit, shirt, accent }: { suit: SuitColorName; shirt: ShirtColorName; accent: AccentColorName }) {
@@ -813,7 +731,7 @@ export function ShowroomPage() {
       <span className="inline-flex items-center gap-3">
         <span 
           className="h-4 w-4 rounded-full border border-zinc-700"
-          style={{ "--swatch-color": hex, backgroundColor: "var(--swatch-color)" } as React.CSSProperties}
+          style={{ backgroundColor: hex }}
         />
         <span className="text-sm text-zinc-200">{label}</span>
       </span>
@@ -889,6 +807,55 @@ export function ShowroomPage() {
       </div>
 
       <Footer />
+    </div>
+  );
+}
+
+// Additional Page Exports
+export function AdminPageContent() {
+  return (
+    <div className="brand-bg min-h-screen text-white">
+      <NavBar />
+      <Section className="py-24">
+        <H1>Admin Panel</H1>
+        <p className="text-zinc-400 mt-4">Admin functionality coming soon.</p>
+      </Section>
+    </div>
+  );
+}
+
+export function BespokePageContent() {
+  return (
+    <div className="brand-bg min-h-screen text-white">
+      <NavBar />
+      <Section className="py-24">
+        <H1>Bespoke Tailoring</H1>
+        <p className="text-zinc-400 mt-4">Custom bespoke services and consultations.</p>
+      </Section>
+    </div>
+  );
+}
+
+export function ThankYouPageContent() {
+  return (
+    <div className="brand-bg min-h-screen text-white">
+      <NavBar />
+      <Section className="py-24 text-center">
+        <H1>Thank You</H1>
+        <p className="text-zinc-400 mt-4">Thank you for your interest in Suave Montiera.</p>
+      </Section>
+    </div>
+  );
+}
+
+export function TestPageContent() {
+  return (
+    <div className="brand-bg min-h-screen text-white">
+      <NavBar />
+      <Section className="py-24">
+        <H1>Test Page</H1>
+        <p className="text-zinc-400 mt-4">This is a test page for development purposes.</p>
+      </Section>
     </div>
   );
 }
