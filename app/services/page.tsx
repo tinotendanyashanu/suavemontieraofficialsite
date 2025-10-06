@@ -226,9 +226,19 @@ const ServicesPage = () => {
                 </div>
               </div>
 
-              <Button className="bg-[#C6A664] hover:bg-[#B89654] text-white px-8 py-4 text-lg">
+              <Button 
+                className="bg-[#C6A664] hover:bg-[#B5954A] text-white px-8 py-4 text-lg"
+                onClick={() => {
+                  const phoneNumber = "+447734123456";
+                  const selectedServiceName = currentService?.title || "tailoring service";
+                  const message = encodeURIComponent(
+                    `Hello! I'm interested in booking the ${selectedServiceName}. Could you please help me schedule an appointment and provide more details about this service?`
+                  );
+                  window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                }}
+              >
                 <Calendar className="w-5 h-5 mr-2" />
-                Book This Service
+                Book on WhatsApp
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
@@ -373,9 +383,18 @@ const ServicesPage = () => {
               Schedule your consultation today and discover the perfect tailoring service for your needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-[#C6A664] hover:bg-[#B5954A] text-white px-8 py-4 text-lg">
+              <Button 
+                className="bg-[#C6A664] hover:bg-[#B5954A] text-white px-8 py-4 text-lg"
+                onClick={() => {
+                  const phoneNumber = "+447734123456";
+                  const message = encodeURIComponent(
+                    "Hello! I would like to book a consultation to discuss your tailoring services and find the perfect option for my needs. Could you please help me schedule an appointment?"
+                  );
+                  window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                }}
+              >
                 <Calendar className="w-5 h-5 mr-2" />
-                Book Consultation
+                Book on WhatsApp
               </Button>
               <Button variant="outline" className="border-[#C6A664] text-[#C6A664] hover:bg-[#C6A664] hover:text-black px-8 py-4 text-lg">
                 <Eye className="w-5 h-5 mr-2" />

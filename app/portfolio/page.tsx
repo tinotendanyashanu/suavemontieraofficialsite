@@ -185,9 +185,19 @@ const PortfolioPage = () => {
                 </div>
               </div>
               
-              <Button className="text-white px-6 py-3" style={{background: 'linear-gradient(to right, #C6A664, #B5954A)'}}>
+              <Button 
+                className="text-white px-6 py-3" 
+                style={{background: 'linear-gradient(to right, #C6A664, #B5954A)'}}
+                onClick={() => {
+                  const phoneNumber = "+447734123456";
+                  const message = encodeURIComponent(
+                    `Hello! I'm interested in commissioning a piece similar to the ${item.title}. Could you please help me discuss the details and schedule a consultation?`
+                  );
+                  window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                }}
+              >
                 <Heart className="w-5 h-5 mr-2" />
-                Commission Similar
+                Commission on WhatsApp
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
@@ -387,9 +397,19 @@ const PortfolioPage = () => {
               Ready to join our portfolio of satisfied clients? Let us create something extraordinary for you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="text-white px-8 py-4 text-lg" style={{background: 'linear-gradient(to right, #C6A664, #B5954A)'}}>
+              <Button 
+                className="text-white px-8 py-4 text-lg" 
+                style={{background: 'linear-gradient(to right, #C6A664, #B5954A)'}}
+                onClick={() => {
+                  const phoneNumber = "+447734123456";
+                  const message = encodeURIComponent(
+                    "Hello! I would like to start a bespoke commission after viewing your portfolio. Could you please help me schedule a consultation to discuss my requirements?"
+                  );
+                  window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                }}
+              >
                 <Calendar className="w-5 h-5 mr-2" />
-                Start Your Commission
+                Start on WhatsApp
               </Button>
               <Button variant="outline" className="px-8 py-4 text-lg" style={{borderColor: '#C6A664', color: '#C6A664'}}>
                 <Sparkles className="w-5 h-5 mr-2" />

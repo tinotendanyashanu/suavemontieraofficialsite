@@ -1179,9 +1179,18 @@ export function ShowroomPage() {
                     </div>
                   ))}
                 </div>
-                <Button className="w-full brand-gold-bg hover:bg-[#B89654] text-white py-3 sm:py-4 text-base touch-manipulation">
+                <Button 
+                  className="w-full brand-gold-bg hover:bg-[#B89654] text-white py-3 sm:py-4 text-base touch-manipulation"
+                  onClick={() => {
+                    const phoneNumber = "+447734123456";
+                    const message = encodeURIComponent(
+                      "Hello! I would like to schedule a fitting appointment for my bespoke garment. Could you please help me find a suitable time?"
+                    );
+                    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                  }}
+                >
                   <Calendar className="w-4 h-4 mr-2" />
-                  Schedule Fitting
+                  Schedule on WhatsApp
                 </Button>
               </div>
             )}
@@ -1261,190 +1270,25 @@ export function ShowroomPage() {
 }
 
 // Premium Interactive Features
+// WhatsApp Booking Integration
 const AppointmentBooking = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState("");
-  const [formData, setFormData] = useState({
-    name: "", email: "", phone: "", date: "", time: "", message: ""
-  });
-
-  const services = [
-    { id: "consultation", name: "Consultation", duration: "60 min", price: "Complimentary" },
-    { id: "fitting", name: "Fitting Session", duration: "90 min", price: "$150" },
-    { id: "bespoke", name: "Bespoke Design", duration: "2 hours", price: "$300" },
-    { id: "alteration", name: "Alterations", duration: "30 min", price: "$75" }
-  ];
+  const handleWhatsAppBooking = () => {
+    const phoneNumber = "+447734123456"; // Replace with actual business WhatsApp number
+    const message = encodeURIComponent(
+      "Hello! I would like to book an appointment for a bespoke tailoring consultation. Could you please help me schedule a time that works best?"
+    );
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
-    <>
-      <Button 
-        onClick={() => setIsOpen(true)}
-        className="text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-        style={{background: 'linear-gradient(to right, #C6A664, #B5954A)'}}
-      >
-        <Calendar className="w-5 h-5 mr-2" />
-        Book Appointment
-      </Button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setIsOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-serif text-white">Book Your Appointment</h2>
-                  <p className="text-zinc-400 mt-1">Schedule your personalized consultation</p>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsOpen(false)}
-                  className="border-zinc-700 hover:bg-zinc-800"
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label className="text-zinc-300 text-sm font-medium mb-2 block">Select Service</label>
-                  <div className="space-y-2">
-                    {services.map((service) => (
-                      <div
-                        key={service.id}
-                        onClick={() => setSelectedService(service.id)}
-                        className={`p-4 border rounded-xl cursor-pointer transition-all ${
-                          selectedService === service.id
-                            ? "border-[#C6A664] bg-[#C6A66410]"
-                            : "border-zinc-700 hover:border-zinc-600"
-                        }`}
-                      >
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="text-white font-medium">{service.name}</h3>
-                            <p className="text-zinc-400 text-sm">{service.duration}</p>
-                          </div>
-                          <span className="text-amber-400 font-medium">{service.price}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-zinc-300 text-sm font-medium mb-2 block">Full Name</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-amber-600 focus:outline-none"
-                      placeholder="Your full name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-zinc-300 text-sm font-medium mb-2 block">Email</label>
-                    <input
-                      type="email"
-                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-amber-600 focus:outline-none"
-                      placeholder="your@email.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-zinc-300 text-sm font-medium mb-2 block">Phone</label>
-                    <input
-                      type="tel"
-                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-amber-600 focus:outline-none"
-                      placeholder="+1 (555) 000-0000"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4 mb-6">
-                <div>
-                  <label className="text-zinc-300 text-sm font-medium mb-2 block">Preferred Date</label>
-                  <input
-                    type="date"
-                    aria-label="Preferred appointment date"
-                    title="Select your preferred appointment date"
-                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-[#C6A664] focus:outline-none touch-manipulation"
-                    value={formData.date}
-                    onChange={(e) => setFormData({...formData, date: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="text-zinc-300 text-sm font-medium mb-2 block">Preferred Time</label>
-                  <select
-                    aria-label="Preferred appointment time"
-                    title="Select your preferred appointment time"
-                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-[#C6A664] focus:outline-none touch-manipulation"
-                    value={formData.time}
-                    onChange={(e) => setFormData({...formData, time: e.target.value})}
-                  >
-                    <option value="">Select time</option>
-                    <option value="09:00">9:00 AM</option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="14:00">2:00 PM</option>
-                    <option value="15:00">3:00 PM</option>
-                    <option value="16:00">4:00 PM</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <label className="text-zinc-300 text-sm font-medium mb-2 block">Special Requests</label>
-                <textarea
-                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-amber-600 focus:outline-none"
-                  rows={3}
-                  placeholder="Any specific requirements or questions..."
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                />
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  onClick={() => setIsOpen(false)}
-                  variant="outline"
-                  className="flex-1 border-zinc-700 hover:bg-zinc-800"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="flex-1 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800"
-                  onClick={() => {
-                    // Handle form submission here
-                    console.log('Booking submitted:', formData, selectedService);
-                    setIsOpen(false);
-                  }}
-                >
-                  <Check className="w-4 h-4 mr-2" />
-                  Confirm Booking
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <Button 
+      onClick={handleWhatsAppBooking}
+      className="text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 brand-gold-bg hover:bg-[#B5954A]"
+    >
+      <Calendar className="w-5 h-5 mr-2" />
+      Book on WhatsApp
+    </Button>
   );
 };
 

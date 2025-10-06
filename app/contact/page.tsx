@@ -328,9 +328,18 @@ const ContactPage = () => {
 
               {/* Quick Actions */}
               <div className="grid gap-4">
-                <Button className="w-full bg-[#C6A664] hover:bg-[#B5954A] text-white py-4 text-lg font-medium">
+                <Button 
+                  className="w-full bg-[#C6A664] hover:bg-[#B5954A] text-white py-4 text-lg font-medium"
+                  onClick={() => {
+                    const phoneNumber = "+447734123456";
+                    const message = encodeURIComponent(
+                      "Hello! I would like to schedule an appointment for a consultation. Could you please help me find a suitable time?"
+                    );
+                    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                  }}
+                >
                   <Calendar className="w-5 h-5 mr-2" />
-                  Schedule Appointment
+                  Schedule on WhatsApp
                 </Button>
                 <Button variant="outline" className="w-full border-[#C6A664] text-[#C6A664] hover:bg-[#C6A664] hover:text-black py-4 text-lg">
                   <Phone className="w-5 h-5 mr-2" />
