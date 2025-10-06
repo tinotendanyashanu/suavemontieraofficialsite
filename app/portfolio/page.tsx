@@ -21,9 +21,22 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+interface PortfolioItem {
+  id: number;
+  title: string;
+  category: string;
+  client: string;
+  description: string;
+  details: string;
+  fabric: string;
+  time: string;
+  image: string;
+  tags: string[];
+}
+
 const PortfolioPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
 
   const categories = [
     { id: "all", label: "All Work" },
@@ -52,7 +65,7 @@ const PortfolioPage = () => {
       category: "wedding",
       client: "Royal Wedding Guest",
       description: "Midnight black tuxedo with satin peak lapels and matching bow tie, designed for a prestigious royal wedding.",
-      details: "Peak lapel tuxedo with hand-sewn buttonhole and custom silk lining featuring the client's family crest.",
+      details: "Peak lapel tuxedo with hand-sewn buttonhole and custom silk lining featuring the client&apos;s family crest.",
       fabric: "Super 180s Wool",
       time: "8 weeks",
       image: "/portfolio/tuxedo-1.jpg",
@@ -112,7 +125,7 @@ const PortfolioPage = () => {
     ? portfolioItems 
     : portfolioItems.filter(item => item.category === selectedCategory);
 
-  const PortfolioModal = ({ item, onClose }) => (
+  const PortfolioModal = ({ item, onClose }: { item: PortfolioItem; onClose: () => void }) => (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
@@ -135,7 +148,7 @@ const PortfolioPage = () => {
               </div>
               <div className="flex flex-wrap gap-2">
                 {item.tags.map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-full text-sm" style={{backgroundColor: '#C6A66410', borderColor: '#C6A66420', border: '1px solid', color: '#C6A664'}}>
+                  <span key={tag} className="px-3 py-1 rounded-full text-sm bg-[#C6A66410] border border-[#C6A66420] brand-gold">
                     {tag}
                   </span>
                 ))}
@@ -146,13 +159,15 @@ const PortfolioPage = () => {
               <button
                 onClick={onClose}
                 className="absolute top-6 right-6 p-2 bg-zinc-800 rounded-full hover:bg-zinc-700 transition-colors"
+                aria-label="Close portfolio details"
+                title="Close details"
               >
                 <X className="w-5 h-5 text-white" />
               </button>
               
               <div className="mb-6">
                 <h2 className="text-3xl font-light text-white mb-4">{item.title}</h2>
-                <p className="font-medium mb-4" style={{color: '#C6A664'}}>{item.client}</p>
+                <p className="font-medium mb-4 brand-gold">{item.client}</p>
                 <p className="text-zinc-300 leading-relaxed mb-6">{item.description}</p>
                 <p className="text-zinc-400 leading-relaxed mb-8">{item.details}</p>
               </div>
@@ -193,13 +208,13 @@ const PortfolioPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8" style={{backgroundColor: '#C6A66410', borderColor: '#C6A66420', border: '1px solid', color: '#C6A664'}}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 bg-[#C6A66410] border border-[#C6A66420] brand-gold">
               <Crown className="w-4 h-4" />
               Portfolio
             </div>
             <h1 className="text-5xl lg:text-7xl font-light mb-8 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
               Masterful
-              <span className="block" style={{color: '#C6A664'}}>Creations</span>
+              <span className="block brand-gold">Creations</span>
             </h1>
             <p className="text-xl text-zinc-300 leading-relaxed">
               Explore our collection of bespoke garments, each one a testament to exceptional 
@@ -219,10 +234,9 @@ const PortfolioPage = () => {
                 onClick={() => setSelectedCategory(category.id)}
                 className={`px-6 py-3 rounded-full transition-all duration-300 ${
                   selectedCategory === category.id
-                    ? "text-black font-medium"
+                    ? "brand-gold-bg text-black font-medium"
                     : "bg-zinc-900 border border-zinc-800 text-white hover:border-zinc-600"
                 }`}
-                style={selectedCategory === category.id ? {backgroundColor: '#C6A664'} : {}}
               >
                 {category.label}
               </button>
@@ -261,7 +275,7 @@ const PortfolioPage = () => {
                     </div>
                     <CardContent className="p-6">
                       <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
-                      <p className="text-sm font-medium mb-3" style={{color: '#C6A664'}}>{item.client}</p>
+                      <p className="text-sm font-medium mb-3 brand-gold">{item.client}</p>
                       <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3">{item.description}</p>
                       <div className="flex flex-wrap gap-2 mt-4">
                         {item.tags.slice(0, 2).map((tag) => (
@@ -339,8 +353,8 @@ const PortfolioPage = () => {
                   ))}
                 </div>
                 <blockquote className="text-xl text-zinc-300 leading-relaxed mb-6 italic">
-                  "Each piece in their portfolio tells a story of exceptional craftsmanship. 
-                  My bespoke suit has become my signature piece - perfectly fitted and timelessly elegant."
+                  &quot;Each piece in their portfolio tells a story of exceptional craftsmanship. 
+                  My bespoke suit has become my signature piece - perfectly fitted and timelessly elegant.&quot;
                 </blockquote>
                 <div className="flex items-center justify-center">
                   <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mr-4">
@@ -358,7 +372,7 @@ const PortfolioPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4" style={{background: 'linear-gradient(to right, #C6A664, #B5954A)'}}>
+      <section className="py-24 px-4 brand-gold-bg">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -398,3 +412,7 @@ const PortfolioPage = () => {
 };
 
 export default PortfolioPage;
+
+
+
+

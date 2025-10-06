@@ -215,7 +215,7 @@ const ServicesPage = () => {
               </div>
 
               <div className="mb-8">
-                <h3 className="text-2xl font-semibold mb-6 text-white">What's Included</h3>
+                <h3 className="text-2xl font-semibold mb-6 text-white">What&apos;s Included</h3>
                 <div className="grid gap-3">
                   {currentService?.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-3">
@@ -261,7 +261,7 @@ const ServicesPage = () => {
                   </div>
                   <p className="text-zinc-300">
                     We stand behind our craftsmanship with a comprehensive satisfaction guarantee. 
-                    If you're not completely satisfied, we'll make it right.
+                    If you&apos;re not completely satisfied, we&apos;ll make it right.
                   </p>
                 </CardContent>
               </Card>
@@ -339,8 +339,8 @@ const ServicesPage = () => {
                   ))}
                 </div>
                 <blockquote className="text-xl text-zinc-300 leading-relaxed mb-6 italic">
-                  "The attention to detail is extraordinary. My bespoke suit fits like a second skin and 
-                  the craftsmanship is evident in every stitch. Truly exceptional service."
+                  &quot;The attention to detail is extraordinary. My bespoke suit fits like a second skin and 
+                  the craftsmanship is evident in every stitch. Truly exceptional service.&quot;
                 </blockquote>
                 <div className="flex items-center justify-center">
                   <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mr-4">
@@ -390,3 +390,9 @@ const ServicesPage = () => {
 };
 
 export default ServicesPage;
+
+
+
+
+
+

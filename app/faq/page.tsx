@@ -39,7 +39,7 @@ const FAQPage = () => {
       id: 1,
       category: "bespoke",
       question: "What's the difference between bespoke and made-to-measure?",
-      answer: "Bespoke tailoring involves creating a completely unique pattern from scratch, specifically for your body and requirements. Every aspect is customizable, from the cut and style to the smallest details. Made-to-measure uses an existing pattern that's adjusted to your measurements, offering some customization but within established parameters. Bespoke requires more fittings and time but provides the ultimate personalized result."
+      answer: "Bespoke tailoring involves creating a completely unique pattern from scratch, specifically for your body and requirements. Every aspect is customizable, from the cut and style to the smallest details. Made-to-measure uses an existing pattern that&apos;s adjusted to your measurements, offering some customization but within established parameters. Bespoke requires more fittings and time but provides the ultimate personalized result."
     },
     {
       id: 2,
@@ -86,8 +86,8 @@ const FAQPage = () => {
     {
       id: 9,
       category: "process",
-      question: "What happens if I'm not satisfied?",
-      answer: "Client satisfaction is our priority. If you're not completely happy with your garment, we'll work with you to make it right. This may include additional adjustments, modifications, or in rare cases, creating a new garment. We stand behind our craftsmanship with a comprehensive guarantee."
+      question: "What happens if I&apos;m not satisfied?",
+      answer: "Client satisfaction is our priority. If you&apos;re not completely happy with your garment, we&apos;ll work with you to make it right. This may include additional adjustments, modifications, or in rare cases, creating a new garment. We stand behind our craftsmanship with a comprehensive guarantee."
     },
     {
       id: 10,
@@ -250,7 +250,7 @@ const FAQPage = () => {
               {
                 icon: Mail,
                 title: "Email Us",
-                description: "Send us your questions and we'll respond within 24 hours.",
+                description: "Send us your questions and we&apos;ll respond within 24 hours.",
                 action: "Send Email",
                 primary: false
               },
@@ -377,7 +377,7 @@ const FAQPage = () => {
               Ready to Begin?
             </h2>
             <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
-              Let's discuss your vision and create something extraordinary together. 
+              Let&apos;s discuss your vision and create something extraordinary together. 
               Your perfect garment awaits.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -398,3 +398,6 @@ const FAQPage = () => {
 };
 
 export default FAQPage;
+
+
+

@@ -1,6 +1,7 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,9 +19,11 @@ import {
   Check,
   X,
   Heart,
-  Eye
+  Eye,
+  Menu
 } from "lucide-react";
 import { Environment, PresentationControls, ContactShadows, useGLTF } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 
 // Brand Configuration
 const brand = {
@@ -85,34 +88,34 @@ export type PresetName = keyof typeof PRESETS;
 
 // UI Primitives
 const Section = ({ id, className = "", children }: { id?: string; className?: string; children: React.ReactNode }) => (
-  <section id={id} className={`max-w-[1200px] mx-auto px-4 md:px-8 ${className}`}>{children}</section>
+  <section id={id} className={`max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 ${className}`}>{children}</section>
 );
 const Eyebrow = ({ children }: { children: React.ReactNode }) => (
   <span className="tracking-[0.25em] uppercase text-[11px] text-zinc-400">{children}</span>
 );
 const H1 = ({ children }: { children: React.ReactNode }) => (
-  <h1 className="font-serif text-5xl md:text-7xl leading-[1.05] text-white">{children}</h1>
+  <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-white">{children}</h1>
 );
 const H2 = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="font-serif text-3xl md:text-5xl text-white">{children}</h2>
+  <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white">{children}</h2>
 );
 
 // Static Hero Component
 const HeroStatic = () => (
   <div className="relative">
-    <Image src={IMAGES.hero} alt="Suave Montiera hero" className="w-full h-[92vh] object-cover" width={1920} height={1080} priority />
+    <Image src={IMAGES.hero} alt="Suave Montiera hero" className="w-full h-[70vh] sm:h-[80vh] md:h-[92vh] object-cover" width={1920} height={1080} priority />
     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
-    <Section className="absolute inset-0 flex items-end pb-24">
+    <Section className="absolute inset-0 flex items-end pb-12 sm:pb-16 md:pb-24">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
         <H1>
           Elegance Meets <span className="brand-gold">Precision</span>
         </H1>
-        <p className="mt-4 text-zinc-300 max-w-2xl">
+        <p className="mt-4 text-zinc-300 max-w-2xl text-base sm:text-lg">
           A modern luxury house crafting architectural tailoring for icons and individuals.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Button size="lg" className="bg-transparent border border-zinc-700 text-white hover:bg-zinc-900">Discover the House</Button>
-          <Button size="lg" className="brand-gold-bg text-black">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <Button size="lg" className="bg-transparent border border-zinc-700 text-white hover:bg-zinc-900 w-full sm:w-auto">Discover the House</Button>
+          <Button size="lg" className="brand-gold-bg text-black w-full sm:w-auto">
             Request Invitation <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
@@ -122,42 +125,140 @@ const HeroStatic = () => (
 );
 
 // Navigation Component
-const NavBar = () => (
-  <div className="sticky top-0 z-50 backdrop-blur bg-black/50 border-b border-zinc-900">
-    <Section className="py-4 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-full overflow-hidden">
-          <Image src={IMAGES.logo} alt="Suave Montiera Logo" width={40} height={40} className="w-full h-full object-cover" />
+const NavBar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <div className="sticky top-0 z-50 backdrop-blur bg-black/50 border-b border-zinc-900">
+      <Section className="py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full overflow-hidden">
+            <Image src={IMAGES.logo} alt="Suave Montiera Logo" width={40} height={40} className="w-full h-full object-cover" />
+          </div>
+          <div className="leading-tight">
+            <div className="text-white font-medium tracking-wide">{brand.name}</div>
+            <div className="text-[10px] text-zinc-400 tracking-[0.2em]">{brand.tagline}</div>
+          </div>
         </div>
-        <div className="leading-tight">
-          <div className="text-white font-medium tracking-wide">{brand.name}</div>
-          <div className="text-[10px] text-zinc-400 tracking-[0.2em]">{brand.tagline}</div>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-8 text-sm">
+          <Link href="/" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Home</Link>
+          <Link href="/about" className="text-zinc-400 hover:text-[#C6A664] transition-colors">About</Link>
+          <Link href="/services" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Services</Link>
+          <Link href="/portfolio" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Portfolio</Link>
+          <Link href="/showroom" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Showroom</Link>
+          <Link href="/contact" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Contact</Link>
+          <Link href="/faq" className="text-zinc-400 hover:text-[#C6A664] transition-colors">FAQ</Link>
+        </nav>
+        
+        {/* Desktop Actions */}
+        <div className="hidden md:flex items-center gap-4">
+          <a 
+            href="https://wa.me/48880516414" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-zinc-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-zinc-800"
+            title="Contact us on WhatsApp"
+          >
+            💬
+          </a>
+          <AppointmentBooking />
         </div>
-      </div>
-      <nav className="hidden md:flex items-center gap-8 text-sm">
-        <a href="/" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Home</a>
-        <a href="/about" className="text-zinc-400 hover:text-[#C6A664] transition-colors">About</a>
-        <a href="/services" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Services</a>
-        <a href="/portfolio" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Portfolio</a>
-        <a href="/showroom" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Showroom</a>
-        <a href="/contact" className="text-zinc-400 hover:text-[#C6A664] transition-colors">Contact</a>
-        <a href="/faq" className="text-zinc-400 hover:text-[#C6A664] transition-colors">FAQ</a>
-      </nav>
-      <div className="flex items-center gap-4">
-        <a 
-          href="https://wa.me/48880516414" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-zinc-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-zinc-800"
-          title="Contact us on WhatsApp"
+        
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden text-zinc-400 hover:text-white transition-colors p-2"
+          aria-label="Toggle menu"
         >
-          💬
-        </a>
-        <AppointmentBooking />
-      </div>
-    </Section>
-  </div>
-);
+          <Menu className="w-6 h-6" />
+        </button>
+      </Section>
+      
+      {/* Mobile Navigation Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-black/95 backdrop-blur border-t border-zinc-800"
+          >
+            <div className="px-4 py-6 space-y-4">
+              <nav className="space-y-4">
+                <Link 
+                  href="/" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link 
+                  href="/about" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link 
+                  href="/services" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Services
+                </Link>
+                <Link 
+                  href="/portfolio" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Portfolio
+                </Link>
+                <Link 
+                  href="/showroom" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Showroom
+                </Link>
+                <Link 
+                  href="/contact" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                <Link 
+                  href="/faq" 
+                  className="block text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  FAQ
+                </Link>
+              </nav>
+              
+              {/* Mobile Actions */}
+              <div className="pt-4 border-t border-zinc-800 space-y-4">
+                <a 
+                  href="https://wa.me/48880516414" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-zinc-400 hover:text-[#C6A664] transition-colors py-2 text-lg"
+                >
+                  💬 WhatsApp
+                </a>
+                <div className="pt-2">
+                  <AppointmentBooking />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 // Core Content Sections
 const TheHouse = () => (
@@ -642,7 +743,10 @@ function ShowroomCanvasHuman({ suit, shirt, accent }: { suit: SuitColorName; shi
     <Canvas 
       shadows 
       camera={{ position: [0, 1.5, 3.5], fov: 50 }} 
-      className="w-full h-full rounded-[24px] overflow-hidden"
+      className="w-full h-full rounded-[24px] overflow-hidden touch-manipulation select-none"
+      gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+      dpr={typeof window !== 'undefined' && window.devicePixelRatio > 2 ? 2 : [1, 2]}
+      performance={{ min: 0.5 }}
     >
       {/* Professional Studio Lighting Setup - Enhanced Sketchfab Quality */}
       
@@ -852,24 +956,35 @@ export function ShowroomPage() {
   ];
 
   const Swatch = ({ hex, active, label, onClick }: { hex: string; active: boolean; label: string; onClick: () => void }) => (
-    <button onClick={onClick} aria-label={label} title={label} className={`group w-full flex items-center justify-between border rounded-xl px-3 py-2 transition-all ${active ? "border-brand-gold bg-brand-gold/10" : "border-zinc-800 bg-black hover:border-zinc-700"}`}>
+    <button 
+      onClick={onClick} 
+      aria-label={`Select ${label} color`} 
+      title={`Choose ${label} color (${hex})`} 
+      className={`group w-full flex items-center justify-between border rounded-xl px-3 py-3 sm:py-2 transition-all touch-manipulation min-h-[56px] sm:min-h-[48px] ${
+        active 
+          ? "border-brand-gold bg-brand-gold/10 shadow-lg" 
+          : "border-zinc-800 bg-black hover:border-zinc-700 active:bg-zinc-900"
+      }`}
+    >
       <span className="inline-flex items-center gap-3">
         <span 
-          className="h-4 w-4 rounded-full border border-zinc-700"
+          className="h-5 w-5 sm:h-4 sm:w-4 rounded-full border border-zinc-700 flex-shrink-0"
+          // Dynamic color swatch requires inline style
+          // eslint-disable-next-line react/forbid-dom-props
           style={{ backgroundColor: hex }}
         />
-        <span className="text-sm text-zinc-200">{label}</span>
+        <span className="text-sm text-zinc-200 font-medium">{label}</span>
       </span>
-      <span className="text-xs text-zinc-500">{hex}</span>
+      <span className="text-xs text-zinc-500 hidden sm:inline">{hex}</span>
     </button>
   );
 
   return (
     <div className="brand-bg min-h-screen text-white">
       <NavBar />
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-20 pb-10 grid lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8">
-          <div className="relative rounded-[24px] border border-zinc-900 overflow-hidden shadow-[0_0_80px_rgba(198,166,100,0.08)] h-[600px] md:h-[700px] lg:h-[800px]">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 pt-12 sm:pt-16 md:pt-20 pb-6 sm:pb-8 md:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8">
+        <div className="lg:col-span-8 order-2 lg:order-1">
+          <div className="relative rounded-[24px] border border-zinc-900 overflow-hidden shadow-[0_0_80px_rgba(198,166,100,0.08)] h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px]">
             <ShowroomCanvasHuman suit={suit} shirt={shirt} accent={accent} />
             
             {/* Measurements Overlay */}
@@ -879,16 +994,18 @@ export function ShowroomPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
+                  className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
                 >
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 max-w-md">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-serif text-white">Measurements</h3>
+                      <h3 className="text-lg sm:text-xl font-serif text-white">Measurements</h3>
                       <Button
                         variant="outline" 
                         size="sm"
                         onClick={() => setShowMeasurements(false)}
-                        className="border-zinc-700"
+                        className="border-zinc-700 touch-manipulation min-h-[44px] min-w-[44px] p-2"
+                        aria-label="Close measurements"
+                        title="Close measurements overlay"
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -910,28 +1027,34 @@ export function ShowroomPage() {
             </AnimatePresence>
 
             {/* 3D Controls */}
-            <div className="absolute top-4 right-4 flex gap-2">
+            <div className="absolute top-3 sm:top-4 right-3 sm:right-4 flex flex-col sm:flex-row gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowMeasurements(!showMeasurements)}
-                className="bg-black/50 backdrop-blur-sm border-zinc-700 hover:bg-zinc-800"
+                className="bg-black/50 backdrop-blur-sm border-zinc-700 hover:bg-zinc-800 touch-manipulation min-h-[44px] px-3 sm:px-4"
+                aria-label="Toggle measurements overlay"
+                title="View detailed measurements"
               >
-                <User className="w-4 h-4 mr-2" />
-                Measurements
+                <User className="w-4 h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Measurements</span>
+                <span className="sm:hidden text-xs">Size</span>
               </Button>
-              <AppointmentBooking />
+              <div className="flex justify-center">
+                <AppointmentBooking />
+              </div>
             </div>
           </div>
           <div className="mt-2 text-xs text-zinc-500 text-center">
-            Click and drag to rotate · Mouse wheel to zoom · Full screen available
+            <span className="hidden sm:inline">Click and drag to rotate · Mouse wheel to zoom · Full screen available</span>
+            <span className="sm:hidden">Touch and drag to rotate · Pinch to zoom · Tap measurements button for details</span>
           </div>
           <div className="mt-3 text-center text-sm text-zinc-400">
             Professional 3D suit model with interactive controls. Select colors to see your customization choices.
           </div>
         </div>
 
-        <aside className="lg:col-span-4 bg-zinc-950/70 border border-zinc-900 rounded-2xl p-6 self-start sticky top-24">
+        <aside className="lg:col-span-4 order-1 lg:order-2 bg-zinc-950/70 border border-zinc-900 rounded-2xl p-4 sm:p-6 lg:self-start lg:sticky lg:top-24">
           <div>
             <Eyebrow>SHOWROOM</Eyebrow>
             <H2>Interactive Atelier</H2>
@@ -939,20 +1062,23 @@ export function ShowroomPage() {
           </div>
 
           {/* Customization Tabs */}
-          <div className="mt-6">
-            <div className="flex space-x-1 bg-zinc-900/50 rounded-xl p-1">
+          <div className="mt-4 sm:mt-6">
+            <div className="grid grid-cols-2 sm:flex sm:space-x-1 gap-1 sm:gap-0 bg-zinc-900/50 rounded-xl p-1">
               {customizationTabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-3 sm:py-2 rounded-lg text-xs font-medium transition-all touch-manipulation min-h-[56px] sm:min-h-[44px] ${
                     activeTab === tab.id 
-                      ? "brand-gold-bg text-white" 
-                      : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                      ? "brand-gold-bg text-white shadow-lg" 
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700"
                   }`}
+                  aria-label={`${tab.label} customization options`}
+                  title={`Customize ${tab.label.toLowerCase()}`}
                 >
-                  <tab.icon className="w-3 h-3" />
-                  {tab.label}
+                  <tab.icon className="w-4 h-4 sm:w-3 sm:h-3" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden text-xs">{tab.label}</span>
                 </button>
               ))}
             </div>
@@ -1045,13 +1171,15 @@ export function ShowroomPage() {
                         <input 
                           type="text" 
                           defaultValue={measurement.value}
-                          className="w-16 px-2 py-1 bg-zinc-800 border border-zinc-700 rounded brand-gold font-mono text-sm text-center"
+                          aria-label={`${measurement.label} measurement`}
+                          title={`Enter your ${measurement.label.toLowerCase()} measurement`}
+                          className="w-16 sm:w-20 px-2 py-2 bg-zinc-800 border border-zinc-700 rounded brand-gold font-mono text-sm text-center touch-manipulation"
                         />
                       </div>
                     </div>
                   ))}
                 </div>
-                <Button className="w-full brand-gold-bg hover:bg-[#B89654] text-white">
+                <Button className="w-full brand-gold-bg hover:bg-[#B89654] text-white py-3 sm:py-4 text-base touch-manipulation">
                   <Calendar className="w-4 h-4 mr-2" />
                   Schedule Fitting
                 </Button>
@@ -1122,7 +1250,7 @@ export function ShowroomPage() {
               <span className="text-white font-medium">Bespoke Service</span>
             </div>
             <p className="text-zinc-400 text-sm leading-relaxed">
-              Starting from <span className="font-medium" style={{color: '#C6A664'}}>$3,200</span> · 
+              Starting from <span className="font-medium brand-gold">$3,200</span> · 
               Includes consultation, fittings, and lifetime alterations.
             </p>
           </div>
@@ -1254,7 +1382,9 @@ const AppointmentBooking = () => {
                   <label className="text-zinc-300 text-sm font-medium mb-2 block">Preferred Date</label>
                   <input
                     type="date"
-                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-amber-600 focus:outline-none"
+                    aria-label="Preferred appointment date"
+                    title="Select your preferred appointment date"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-[#C6A664] focus:outline-none touch-manipulation"
                     value={formData.date}
                     onChange={(e) => setFormData({...formData, date: e.target.value})}
                   />
@@ -1262,7 +1392,9 @@ const AppointmentBooking = () => {
                 <div>
                   <label className="text-zinc-300 text-sm font-medium mb-2 block">Preferred Time</label>
                   <select
-                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-amber-600 focus:outline-none"
+                    aria-label="Preferred appointment time"
+                    title="Select your preferred appointment time"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:border-[#C6A664] focus:outline-none touch-manipulation"
                     value={formData.time}
                     onChange={(e) => setFormData({...formData, time: e.target.value})}
                   >

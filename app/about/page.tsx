@@ -44,7 +44,7 @@ const AboutPage = () => {
 
   const milestones = [
     { year: "1995", title: "Founded", description: "Established in London with a vision for excellence" },
-    { year: "2003", title: "Expansion", description: "Opened flagship atelier in Savile Row" },
+    { year: "2003", title: "Expansion",                     description: "Opened our flagship atelier in London&apos;s prestigious Savile Row district" },
     { year: "2010", title: "Recognition", description: "Awarded Master Tailor of the Year" },
     { year: "2018", title: "Global Reach", description: "Serving clients in 15 countries worldwide" },
     { year: "2025", title: "Innovation", description: "Leading digital tailoring revolution" }
@@ -133,11 +133,11 @@ const AboutPage = () => {
                 <p className="text-lg text-zinc-300 leading-relaxed mb-6">
                   Alessandro Montiera began his journey in a small atelier in Milan, learning the ancient 
                   art of tailoring from his grandfather. With a dream to bring Italian craftsmanship to 
-                  the world, he established Suave Montiera in London's prestigious tailoring district.
+                  the world, he established Suave Montiera in London&apos;s prestigious tailoring district.
                 </p>
                 <p className="text-lg text-zinc-300 leading-relaxed mb-8">
                   Today, our atelier represents the perfect fusion of traditional techniques and modern 
-                  innovation, creating bespoke garments that tell each client's unique story.
+                  innovation, creating bespoke garments that tell each client&apos;s unique story.
                 </p>
               </div>
               

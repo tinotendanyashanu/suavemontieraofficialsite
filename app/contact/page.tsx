@@ -28,14 +28,14 @@ const ContactPage = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -170,7 +170,7 @@ const ContactPage = () => {
               <div className="mb-8">
                 <h2 className="text-4xl lg:text-5xl font-light mb-6">Get in Touch</h2>
                 <p className="text-xl text-zinc-400">
-                  Ready to begin your bespoke journey? Send us a message and we'll get back to you within 24 hours.
+                  Ready to begin your bespoke journey? Send us a message and we&apos;ll get back to you within 24 hours.
                 </p>
               </div>
 
@@ -294,7 +294,7 @@ const ContactPage = () => {
                       {
                         icon: Crown,
                         title: "Premium Location",
-                        description: "Located in the heart of Savile Row, the world's tailoring capital."
+                        description: "Located in the heart of Savile Row, the world&apos;s tailoring capital."
                       },
                       {
                         icon: Users,
@@ -433,3 +433,6 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
+
+
+
